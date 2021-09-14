@@ -3,6 +3,7 @@ from fastapi import FastAPI, HTTPException
 from serviceType import service_type
 from Models.SentimentData import SentimentData
 from Service.init_csv import initial_csv
+from fastapi.logger import logger
 
 app = FastAPI()
 
@@ -25,6 +26,7 @@ async def get_predict(sentimentText: str):
 
 @app.post("/data")
 async def get_data(sentiment: SentimentData) -> SentimentData:
+  logger.info(f"receive data {sentiment}")
   if sentiment is None:
     raise HTTPException(status_code=500, default="Invalid Model")
   data = [sentiment.Sentiment, sentiment.SentimentText]
