@@ -24,7 +24,7 @@ async def get_predict(sentimentText: str):
   prediction = str(prediction)
   return {"Sentiment" : sentimentText, "Predict": prediction, "บริการ": guard}
 
-@app.post("/data")
+@app.post("/data", response_model=SentimentData, status_code=200)
 async def get_data(sentiment: SentimentData) -> SentimentData:
   logger.info(f"receive data {sentiment}")
   if sentiment is None:
