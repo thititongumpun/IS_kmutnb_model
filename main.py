@@ -1,6 +1,8 @@
 from joblib import load
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from serviceType import service_type
+from Models.SentimentData import SentimentData
+from Service.init_csv import initial_csv
 
 app = FastAPI()
 
@@ -20,3 +22,12 @@ async def get_predict(sentimentText: str):
   prediction = model.predict(vec)
   prediction = str(prediction)
   return {"Sentiment" : sentimentText, "Predict": prediction, "บริการ": guard}
+
+@app.post("/data")
+async def get_data(sentiment: SentimentData) -> SentimentData:
+  if sentiment is None:
+    raise HTTPException(status_code=500, default="Invalid Model")
+  data = [sentiment.Sentiment, sentiment.SentimentText]
+  await initial_csv(data)
+  return sentiment
+
