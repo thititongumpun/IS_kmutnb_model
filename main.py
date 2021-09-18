@@ -17,12 +17,10 @@ async def read_root():
 @app.get("/predict")
 async def get_predict(sentimentText: str):
   guard = service_type(sentimentText)
-  print(guard)
   text = [sentimentText]
   vec = vector.transform(text)
-  prediction = model.predict(vec)
-  prediction = str(prediction)
-  return {"Sentiment" : sentimentText, "Predict": prediction, "บริการ": guard}
+  prediction = model.predict(vec)  
+  return {"Sentiment" : sentimentText, "Predict": prediction[0], "Service Type": guard}
 
 @app.post("/data", response_model=SentimentData, status_code=200)
 async def get_data(sentiment: SentimentData) -> SentimentData:
